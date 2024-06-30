@@ -17,7 +17,8 @@ public class EmployeeService {
     public EmployeeResponse getEmployee(Long no){
         var employeePs = employeeRepository.findById(no)
                 .orElseThrow(() ->  new RuntimeException("사원을 찾을 수 없음"));
-        return new EmployeeResponse(employeePs.getId(), employeePs.getName(), employeePs.getPosition(), employeePs.getDepartment());
+        return new EmployeeResponse(employeePs.getId(), employeePs.getName(), employeePs.getPosition(), employeePs.getDepartment(),
+                employeePs.getCreatedAt(), employeePs.getUpdatedAt());
     }
 
 
@@ -28,6 +29,7 @@ public class EmployeeService {
                 .position(employeeRequest.position())
                 .department(employeeRequest.department())
                 .build();
+
 
         var employeePs = employeeRepository.save(employeeEntity);
         return employeePs.getId();

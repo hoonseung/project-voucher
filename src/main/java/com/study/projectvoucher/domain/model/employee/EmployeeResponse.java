@@ -1,4 +1,4 @@
-package com.study.projectvoucher.model.employee;
+package com.study.projectvoucher.domain.model.employee;
 
 public record EmployeeResponse(
         Long no,

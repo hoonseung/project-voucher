@@ -4,30 +4,33 @@ import com.study.projectvoucher.domain.model.employee.EmployeeRequest;
 import com.study.projectvoucher.domain.model.employee.EmployeeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class EmployeeService {
 
-    private final Map<Long, EmployeeResponse> map = new ConcurrentHashMap<>();
-
-    private static final AtomicLong employeeNo = new AtomicLong(1L);
+    private final EmployeeRepository employeeRepository;
 
 
     public EmployeeResponse getEmployee(Long no){
-        var employee = map.getOrDefault(no, new EmployeeResponse(no, "익명", "없음", "없음"));
-        return new EmployeeResponse(employee.no(), employee.name(), employee.position(), employee.department());
+        var employeePs = employeeRepository.findById(no)
+                .orElseThrow(() ->  new RuntimeException("사원을 찾을 수 없음"));
+        return new EmployeeResponse(employeePs.getId(), employeePs.getName(), employeePs.getPosition(), employeePs.getDepartment());
     }
 
 
+    @Transactional
     public Long createEmployee(EmployeeRequest employeeRequest){
-        var no = employeeNo.getAndIncrement();
-        map.put(no, new EmployeeResponse(no, employeeRequest.name(), employeeRequest.position(), employeeRequest.department()));
-        return no;
+        var employeeEntity = EmployeeEntity.builder()
+                .name(employeeRequest.name())
+                .position(employeeRequest.position())
+                .department(employeeRequest.department())
+                .build();
+
+        var employeePs = employeeRepository.save(employeeEntity);
+        return employeePs.getId();
     }
 
 }

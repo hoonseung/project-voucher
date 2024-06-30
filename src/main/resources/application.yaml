@@ -6,7 +6,6 @@ server:
 
 spring:
   jpa:
-    database: mysql
     hibernate:
       ddl-auto: create
     properties:
@@ -22,3 +21,4 @@ logging:
   level:
     org.hibernate.SQL: trace
     org.hibernate.orm.jdbc.bind: trace
+

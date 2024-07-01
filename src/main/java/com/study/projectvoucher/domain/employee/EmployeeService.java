@@ -1,7 +1,7 @@
 package com.study.projectvoucher.domain.employee;
 
-import com.study.projectvoucher.domain.model.employee.EmployeeRequest;
-import com.study.projectvoucher.domain.model.employee.EmployeeResponse;
+import com.study.projectvoucher.model.employee.EmployeeRequest;
+import com.study.projectvoucher.model.employee.EmployeeResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

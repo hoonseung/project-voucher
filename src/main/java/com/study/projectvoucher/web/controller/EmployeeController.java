@@ -2,8 +2,8 @@ package com.study.projectvoucher.web.controller;
 
 
 import com.study.projectvoucher.domain.employee.EmployeeService;
-import com.study.projectvoucher.domain.model.employee.EmployeeRequest;
-import com.study.projectvoucher.domain.model.employee.EmployeeResponse;
+import com.study.projectvoucher.model.employee.EmployeeRequest;
+import com.study.projectvoucher.model.employee.EmployeeResponse;
 import org.springframework.web.bind.annotation.*;
 
 

@@ -1,4 +1,4 @@
-package com.study.projectvoucher.domain.model.employee;
+package com.study.projectvoucher.model.employee;
 
 
 import java.time.LocalDateTime;

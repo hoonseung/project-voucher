@@ -2,7 +2,7 @@ package com.study.projectvoucher.service;
 
 
 import com.study.projectvoucher.domain.employee.EmployeeService;
-import com.study.projectvoucher.domain.model.employee.EmployeeRequest;
+import com.study.projectvoucher.model.employee.EmployeeRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

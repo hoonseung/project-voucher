@@ -20,20 +20,20 @@ public class VoucherEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private VoucherStatus status;
 
-    private LocalDate validTo;
-
     private LocalDate validFrom;
+
+    private LocalDate validTo;
 
     private Long amount;
 
 
     protected VoucherEntity(){}
 
-    public VoucherEntity(String code, VoucherStatus status, LocalDate validTo, LocalDate validFrom, Long amount) {
+    public VoucherEntity(String code, VoucherStatus status, LocalDate validFrom, LocalDate validTo, Long amount) {
         this.code = code;
         this.status = status;
-        this.validTo = validTo;
         this.validFrom = validFrom;
+        this.validTo = validTo;
         this.amount = amount;
     }
 

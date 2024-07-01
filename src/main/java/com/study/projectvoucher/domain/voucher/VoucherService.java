@@ -30,8 +30,13 @@ public class VoucherService {
         return voucherRepository.save(voucherEntity).getCode();
     }
 
-
-    // 상품권 취소
+    // 상품권 사용불가 처리
+    @Transactional
+    public void disableCode(final String code){
+        final VoucherEntity voucherPs = voucherRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품권을 찾을 수 없습니다."));
+        voucherPs.changeStatusToDisable();
+    }
 
 
 

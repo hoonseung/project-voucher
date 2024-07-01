@@ -6,6 +6,7 @@ import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,26 +20,51 @@ import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
  class VoucherServiceTests {
 
-    @Autowired
-    private VoucherService voucherService;
+   @Autowired
+   private VoucherService voucherService;
 
-    @Autowired
-    private VoucherRepository voucherRepository;
+   @Autowired
+   private VoucherRepository voucherRepository;
+
+   @DisplayName("발행된 상품권은 code로 조회 가능해야한다.")
+   @Test
+   void whenPublishedThenEnableShouldSearchCode() {
+      final LocalDate validFrom = LocalDate.now();
+      final LocalDate validTo = LocalDate.now().plusDays(30);
+      final Long amount = 10000L;
+      final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, amount);
 
 
-    @Test
-    void whenPublishedThenEnableShouldSearchCode(){
-       final LocalDate validFrom = LocalDate.now();
-       final LocalDate validTo = LocalDate.now().plusDays(30);
-       final Long amount = 10000L;
-       final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, amount);
+      final String code = voucherService.publish(voucherRequest);
+
+      final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
+
+      assertThat(voucherPs.getCode()).isEqualTo(code);
+      assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.PUBLISH);
+   }
 
 
-       final String code = voucherService.publish(voucherRequest);
+   @DisplayName("발행된 상품권은 사용불가 처리 할 수 있다.")
+   @Test
+   void whenPublishedThenEnableShouldChangeToCancelVoucherStatus() {
+      final LocalDate validFrom = LocalDate.now();
+      final LocalDate validTo = LocalDate.now().plusDays(30);
+      final Long amount = 10000L;
+      final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, amount);
 
-       final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
 
-       assertThat(voucherPs.getCode()).isEqualTo(code);
-       assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.PUBLISH);
-    }
+      final String code = voucherService.publish(voucherRequest);
+      voucherService.disableCode(code);
+      final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
+
+      assertThat(voucherPs.getCode()).isEqualTo(code);
+      assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.DISABLE);
+      assertThat(voucherPs.getCreatedAt()).isNotEqualTo(voucherPs.getUpdatedAt());
+   }
+
+
+
+
+
+
 }

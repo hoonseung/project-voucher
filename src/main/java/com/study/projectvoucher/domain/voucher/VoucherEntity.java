@@ -56,4 +56,9 @@ public class VoucherEntity extends BaseEntity {
     public Long getAmount() {
         return amount;
     }
+
+
+    public void changeStatusToDisable() {
+        this.status = VoucherStatus.DISABLE;
+    }
 }

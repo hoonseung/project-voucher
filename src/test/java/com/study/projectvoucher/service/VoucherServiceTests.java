@@ -63,6 +63,25 @@ import static org.assertj.core.api.Assertions.*;
    }
 
 
+    @DisplayName("발행된 상품권은 사용할 수 있다.")
+    @Test
+    void whenPublishedThenEnableShouldVoucher() {
+        final LocalDate validFrom = LocalDate.now();
+        final LocalDate validTo = LocalDate.now().plusDays(30);
+        final Long amount = 10000L;
+        final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, amount);
+
+
+        final String code = voucherService.publish(voucherRequest);
+        voucherService.useCode(code);
+        final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
+
+        assertThat(voucherPs.getCode()).isEqualTo(code);
+        assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.USE);
+        assertThat(voucherPs.getCreatedAt()).isNotEqualTo(voucherPs.getUpdatedAt());
+    }
+
+
 
 
 

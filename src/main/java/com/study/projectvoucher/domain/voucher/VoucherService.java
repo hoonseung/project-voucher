@@ -41,4 +41,11 @@ public class VoucherService {
 
 
     // 상품권 사용
+    @Transactional
+    public void useCode(final String code){
+        final VoucherEntity voucherPs = voucherRepository.findByCode(code)
+                .orElseThrow(() -> new IllegalArgumentException("해당 상품권을 찾을 수 없습니다."));
+        voucherPs.changeStatusToUse();
+    }
+
 }

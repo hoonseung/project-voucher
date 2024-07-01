@@ -59,6 +59,20 @@ public class VoucherEntity extends BaseEntity {
 
 
     public void changeStatusToDisable() {
-        this.status = VoucherStatus.DISABLE;
+        if (this.status.equals(VoucherStatus.PUBLISH)) {
+            this.status = VoucherStatus.DISABLE;
+        }else {
+            throw new IllegalStateException("이미 사용된 상태의 상품권 입니다.");
+        }
+    }
+
+    public void changeStatusToUse() {
+        if (this.status.equals(VoucherStatus.PUBLISH)) {
+            this.status = VoucherStatus.USE;
+        } else if (this.status.equals(VoucherStatus.USE)) {
+            throw new IllegalStateException("이미 사용된 상태의 상품권 입니다.");
+        } else {
+            throw new IllegalStateException("사용할 수 없는 상태의 상품권 입니다.");
+        }
     }
 }

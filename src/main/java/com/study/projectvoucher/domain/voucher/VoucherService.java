@@ -1,7 +1,8 @@
 package com.study.projectvoucher.domain.voucher;
 
+import com.study.projectvoucher.domain.common.VoucherAmount;
 import com.study.projectvoucher.domain.common.VoucherStatus;
-import com.study.projectvoucher.domain.model.voucher.VoucherRequest;
+import com.study.projectvoucher.model.voucher.VoucherRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,8 +1,9 @@
 package com.study.projectvoucher.service;
 
 
+import com.study.projectvoucher.domain.common.VoucherAmount;
 import com.study.projectvoucher.domain.common.VoucherStatus;
-import com.study.projectvoucher.domain.model.voucher.VoucherRequest;
+import com.study.projectvoucher.model.voucher.VoucherRequest;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
@@ -40,8 +41,7 @@ import static org.junit.jupiter.api.DynamicTest.*;
                 dynamicTest("[0] 상품권을 발행합니다.", () -> {
                     final LocalDate validFrom = LocalDate.now();
                     final LocalDate validTo = LocalDate.now().plusDays(30);
-                    final Long amount = 10000L;
-                    final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, amount);
+                    final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
                     final String code = voucherService.publish(voucherRequest);
@@ -65,8 +65,7 @@ import static org.junit.jupiter.api.DynamicTest.*;
                 dynamicTest("[1] 상품권을 사용합니다.", () -> {
                     final LocalDate validFrom = LocalDate.now();
                     final LocalDate validTo = LocalDate.now().plusDays(30);
-                    final Long amount = 10000L;
-                    final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, amount);
+                    final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
                     final String code = voucherService.publish(voucherRequest);

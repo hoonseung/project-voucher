@@ -2,6 +2,7 @@ package com.study.projectvoucher.domain.voucher;
 
 
 import com.study.projectvoucher.domain.BaseEntity;
+import com.study.projectvoucher.domain.common.VoucherAmount;
 import com.study.projectvoucher.domain.common.VoucherStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -24,12 +25,13 @@ public class VoucherEntity extends BaseEntity {
 
     private LocalDate validTo;
 
-    private Long amount;
+    @Enumerated(EnumType.STRING)
+    private VoucherAmount amount;
 
 
     protected VoucherEntity(){}
 
-    public VoucherEntity(String code, VoucherStatus status, LocalDate validFrom, LocalDate validTo, Long amount) {
+    public VoucherEntity(String code, VoucherStatus status, LocalDate validFrom, LocalDate validTo, VoucherAmount amount) {
         this.code = code;
         this.status = status;
         this.validFrom = validFrom;
@@ -45,15 +47,15 @@ public class VoucherEntity extends BaseEntity {
         return status;
     }
 
-    public LocalDate getValidTo() {
-        return validTo;
-    }
-
     public LocalDate getValidFrom() {
         return validFrom;
     }
 
-    public Long getAmount() {
+    public LocalDate getValidTo() {
+        return validTo;
+    }
+
+    public VoucherAmount getAmount() {
         return amount;
     }
 

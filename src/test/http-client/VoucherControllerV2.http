@@ -1,0 +1,30 @@
+### 상품권 생성
+POST localhost:9000/api/v2/voucher
+Content-Type: application/json
+
+{
+  "requestId": "12345",
+  "requestType": "USER",
+  "amount": "KRW_30000"
+}
+
+
+### 상품권 사용
+PUT localhost:9000/api/v2/voucher/use
+Content-Type: application/json
+
+{
+  "requestId": "12345",
+  "requestType": "USER",
+  "code": "BA43A70B40204011AAA6DA2A20611C89"
+}
+
+### 상품권 폐기
+PUT localhost:9000/api/v2/voucher/disable
+Content-Type: application/json
+
+{
+  "requestId": "12345",
+  "requestType": "USER",
+  "code": "CE9799656E854FC483DE761F92C4B6FB"
+}

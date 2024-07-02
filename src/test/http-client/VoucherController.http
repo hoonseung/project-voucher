@@ -1,6 +1,3 @@
-### 사원 조회
-GET http://localhost:9000/api/v1/employee/1
-
 ### 상품권 생성
 POST localhost:9000/api/v1/voucher
 Content-Type: application/json
@@ -8,3 +5,21 @@ Content-Type: application/json
 {
   "amount": "KRW_30000"
 }
+
+### 상품권 사용
+PUT localhost:9000/api/v1/voucher/use
+Content-Type: application/json
+
+{
+  "code": "7FBC33F88DD7426987FC975ECAA972E8"
+}
+
+
+### 상품권 폐기
+PUT localhost:9000/api/v1/voucher/disable
+Content-Type: application/json
+
+{
+  "code": ""
+}
+

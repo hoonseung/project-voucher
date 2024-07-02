@@ -1,11 +1,11 @@
-package com.study.projectvoucher.service;
+package com.study.projectvoucher.service.v1;
 
-import com.study.projectvoucher.domain.common.VoucherAmount;
-import com.study.projectvoucher.domain.common.VoucherStatus;
-import com.study.projectvoucher.model.voucher.VoucherPublishRequest;
+import com.study.projectvoucher.domain.common.type.VoucherAmount;
+import com.study.projectvoucher.domain.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
+import com.study.projectvoucher.model.voucher.v1.VoucherPublishResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +31,12 @@ import static org.assertj.core.api.Assertions.*;
    void whenPublishedThenEnableShouldSearchCode() {
       final LocalDate validFrom = LocalDate.now();
       final LocalDate validTo = LocalDate.now().plusDays(30);
-      final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
+       VoucherPublishResponse response = voucherService.publish(VoucherAmount.KRW_30000, validFrom, validTo);
 
-      final String code = voucherService.publish(voucherPublishRequest);
+      final VoucherEntity voucherPs = voucherRepository.findByCode(response.code()).get();
 
-      final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
-
-      assertThat(voucherPs.getCode()).isEqualTo(code);
+      assertThat(voucherPs.getCode()).isEqualTo(response.code());
       assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.PUBLISH);
    }
 
@@ -48,14 +46,13 @@ import static org.assertj.core.api.Assertions.*;
    void whenPublishedThenEnableShouldChangeToCancelVoucherStatus() {
       final LocalDate validFrom = LocalDate.now();
       final LocalDate validTo = LocalDate.now().plusDays(30);
-      final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
-      final String code = voucherService.publish(voucherPublishRequest);
-      voucherService.disableCode(code);
-      final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
+      VoucherPublishResponse response = voucherService.publish(VoucherAmount.KRW_30000, validFrom, validTo);
+      voucherService.disableCode(response.code());
+      final VoucherEntity voucherPs = voucherRepository.findByCode(response.code()).get();
 
-      assertThat(voucherPs.getCode()).isEqualTo(code);
+      assertThat(voucherPs.getCode()).isEqualTo(response.code());
       assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.DISABLE);
       assertThat(voucherPs.getCreatedAt()).isNotEqualTo(voucherPs.getUpdatedAt());
    }
@@ -66,14 +63,13 @@ import static org.assertj.core.api.Assertions.*;
     void whenPublishedThenEnableShouldVoucher() {
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
-        final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
-        final String code = voucherService.publish(voucherPublishRequest);
-        voucherService.useCode(code);
-        final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
+        VoucherPublishResponse response = voucherService.publish(VoucherAmount.KRW_30000, validFrom, validTo);
+        voucherService.useCode(response.code());
+        final VoucherEntity voucherPs = voucherRepository.findByCode(response.code()).get();
 
-        assertThat(voucherPs.getCode()).isEqualTo(code);
+        assertThat(voucherPs.getCode()).isEqualTo(response.code());
         assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.USE);
         assertThat(voucherPs.getCreatedAt()).isNotEqualTo(voucherPs.getUpdatedAt());
     }

@@ -1,12 +1,12 @@
-package com.study.projectvoucher.service;
+package com.study.projectvoucher.service.v1;
 
 
-import com.study.projectvoucher.domain.common.VoucherAmount;
-import com.study.projectvoucher.domain.common.VoucherStatus;
-import com.study.projectvoucher.model.voucher.VoucherPublishRequest;
+import com.study.projectvoucher.domain.common.type.VoucherAmount;
+import com.study.projectvoucher.domain.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
+import com.study.projectvoucher.model.voucher.v1.VoucherPublishResponse;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +41,10 @@ import static org.junit.jupiter.api.DynamicTest.*;
                 dynamicTest("[0] 상품권을 발행합니다.", () -> {
                     final LocalDate validFrom = LocalDate.now();
                     final LocalDate validTo = LocalDate.now().plusDays(30);
-                    final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
-
-                    final String code = voucherService.publish(voucherPublishRequest);
-                    final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
-                    codes.add(code);
+                    VoucherPublishResponse response = voucherService.publish(VoucherAmount.KRW_30000, validFrom, validTo);
+                    final VoucherEntity voucherPs = voucherRepository.findByCode(response.code()).get();
+                    codes.add(response.code());
                     assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.PUBLISH);
 
                 }),
@@ -65,12 +63,11 @@ import static org.junit.jupiter.api.DynamicTest.*;
                 dynamicTest("[1] 상품권을 사용합니다.", () -> {
                     final LocalDate validFrom = LocalDate.now();
                     final LocalDate validTo = LocalDate.now().plusDays(30);
-                    final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
-                    final String code = voucherService.publish(voucherPublishRequest);
-                    codes.add(code);
-                    voucherService.useCode(code);
+                    VoucherPublishResponse response = voucherService.publish(VoucherAmount.KRW_30000, validFrom, validTo);
+                    codes.add(response.code());
+                    voucherService.useCode(response.code());
                 }),
 
                 dynamicTest("[1] 사용한 상품권은 사용 불가 처리 할 수 없습니다.", () -> {

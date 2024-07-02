@@ -1,4 +1,4 @@
-package com.study.projectvoucher.domain.common;
+package com.study.projectvoucher.domain.common.type;
 
 public enum VoucherStatus {
 

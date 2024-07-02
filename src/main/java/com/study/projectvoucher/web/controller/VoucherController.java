@@ -35,13 +35,11 @@ public class VoucherController {
                 publishRequest.amount(), LocalDate.now(), LocalDate.now().plusDays(1830L));
     }
 
-
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/v1/voucher/use")
     public void use(@RequestBody VoucherUseRequest useRequest){
         voucherService.useCode(useRequest.code());
     }
-
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/v1/voucher/disable")

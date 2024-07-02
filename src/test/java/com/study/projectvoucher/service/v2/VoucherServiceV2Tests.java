@@ -1,14 +1,13 @@
 package com.study.projectvoucher.service.v2;
 
-import com.study.projectvoucher.domain.common.dto.RequestContext;
-import com.study.projectvoucher.domain.common.type.RequestType;
-import com.study.projectvoucher.domain.common.type.VoucherAmount;
-import com.study.projectvoucher.domain.common.type.VoucherStatus;
+import com.study.projectvoucher.common.dto.RequestContext;
+import com.study.projectvoucher.common.type.RequestType;
+import com.study.projectvoucher.common.type.VoucherAmount;
+import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.history.VoucherHistoryEntity;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
-import com.study.projectvoucher.model.voucher.v1.VoucherPublishResponse;
 import com.study.projectvoucher.model.voucher.v2.VoucherPublishV2Response;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;

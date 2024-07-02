@@ -16,7 +16,7 @@ Content-Type: application/json
 {
   "requestType": "PARTNER",
   "requestId": "A00058",
-  "code": "7C095D931D0C4FA6A0398E6A86AB55D2"
+  "code": "30D3D42FB8D04C74A0B5852188EFBA61"
 }
 
 ### 상품권 폐기
@@ -26,5 +26,5 @@ Content-Type: application/json
 {
   "requestType": "PARTNER",
   "requestId": "A00060",
-  "code": "7C095D931D0C4FA6A0398E6A86AB55D2"
+  "code": "30D3D42FB8D04C74A0B5852188EFBA61"
 }

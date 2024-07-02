@@ -1,9 +1,8 @@
 package com.study.projectvoucher.domain.voucher;
 
-import com.study.projectvoucher.domain.common.dto.RequestContext;
-import com.study.projectvoucher.domain.common.type.RequestType;
-import com.study.projectvoucher.domain.common.type.VoucherAmount;
-import com.study.projectvoucher.domain.common.type.VoucherStatus;
+import com.study.projectvoucher.common.dto.RequestContext;
+import com.study.projectvoucher.common.type.VoucherAmount;
+import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.history.VoucherHistoryEntity;
 import com.study.projectvoucher.model.voucher.v1.VoucherPublishResponse;
 import com.study.projectvoucher.model.voucher.v2.*;

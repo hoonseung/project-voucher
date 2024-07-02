@@ -1,7 +1,6 @@
 package com.study.projectvoucher.web.controller;
 
-import com.study.projectvoucher.domain.common.dto.RequestContext;
-import com.study.projectvoucher.domain.common.type.RequestType;
+import com.study.projectvoucher.common.dto.RequestContext;
 import com.study.projectvoucher.domain.voucher.VoucherService;
 import com.study.projectvoucher.model.voucher.v1.VoucherDisableRequest;
 import com.study.projectvoucher.model.voucher.v1.VoucherPublishRequest;

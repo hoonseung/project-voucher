@@ -17,7 +17,7 @@ public class EmployeeService {
 
     public EmployeeResponse getEmployee(Long no){
         var employeePs = employeeRepository.findById(no)
-                .orElseThrow(() ->  new RuntimeException("사원을 찾을 수 없음"));
+                .orElseThrow(() ->  new IllegalArgumentException("사원을 찾을 수 없음"));
         return new EmployeeResponse(employeePs.getId(), employeePs.getName(), employeePs.getPosition(), employeePs.getDepartment(),
                 employeePs.getCreatedAt(), employeePs.getUpdatedAt());
     }

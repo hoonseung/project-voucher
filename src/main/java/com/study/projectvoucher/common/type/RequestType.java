@@ -1,4 +1,4 @@
-package com.study.projectvoucher.domain.common.type;
+package com.study.projectvoucher.common.type;
 
 public enum RequestType {
 

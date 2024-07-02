@@ -1,7 +1,7 @@
 package com.study.projectvoucher.service.v1;
 
-import com.study.projectvoucher.domain.common.type.VoucherAmount;
-import com.study.projectvoucher.domain.common.type.VoucherStatus;
+import com.study.projectvoucher.common.type.VoucherAmount;
+import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;

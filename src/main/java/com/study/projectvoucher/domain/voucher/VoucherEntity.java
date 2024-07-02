@@ -2,8 +2,8 @@ package com.study.projectvoucher.domain.voucher;
 
 
 import com.study.projectvoucher.domain.BaseEntity;
-import com.study.projectvoucher.domain.common.type.VoucherAmount;
-import com.study.projectvoucher.domain.common.type.VoucherStatus;
+import com.study.projectvoucher.common.type.VoucherAmount;
+import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.history.VoucherHistoryEntity;
 import jakarta.persistence.*;
 

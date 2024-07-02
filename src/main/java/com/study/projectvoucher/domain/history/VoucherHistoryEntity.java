@@ -2,9 +2,8 @@ package com.study.projectvoucher.domain.history;
 
 
 import com.study.projectvoucher.domain.BaseEntity;
-import com.study.projectvoucher.domain.common.type.RequestType;
-import com.study.projectvoucher.domain.common.type.VoucherStatus;
-import com.study.projectvoucher.domain.voucher.VoucherEntity;
+import com.study.projectvoucher.common.type.RequestType;
+import com.study.projectvoucher.common.type.VoucherStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

@@ -1,14 +1,13 @@
 package com.study.projectvoucher.service.v2;
 
 
-import com.study.projectvoucher.domain.common.dto.RequestContext;
-import com.study.projectvoucher.domain.common.type.RequestType;
-import com.study.projectvoucher.domain.common.type.VoucherAmount;
-import com.study.projectvoucher.domain.common.type.VoucherStatus;
+import com.study.projectvoucher.common.dto.RequestContext;
+import com.study.projectvoucher.common.type.RequestType;
+import com.study.projectvoucher.common.type.VoucherAmount;
+import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
-import com.study.projectvoucher.model.voucher.v1.VoucherPublishResponse;
 import com.study.projectvoucher.model.voucher.v2.VoucherPublishV2Response;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

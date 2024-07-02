@@ -2,7 +2,7 @@ package com.study.projectvoucher.service;
 
 import com.study.projectvoucher.domain.common.VoucherAmount;
 import com.study.projectvoucher.domain.common.VoucherStatus;
-import com.study.projectvoucher.model.voucher.VoucherRequest;
+import com.study.projectvoucher.model.voucher.VoucherPublishRequest;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
@@ -31,10 +31,10 @@ import static org.assertj.core.api.Assertions.*;
    void whenPublishedThenEnableShouldSearchCode() {
       final LocalDate validFrom = LocalDate.now();
       final LocalDate validTo = LocalDate.now().plusDays(30);
-      final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, VoucherAmount.KRW_30000);
+      final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
-      final String code = voucherService.publish(voucherRequest);
+      final String code = voucherService.publish(voucherPublishRequest);
 
       final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
 
@@ -48,10 +48,10 @@ import static org.assertj.core.api.Assertions.*;
    void whenPublishedThenEnableShouldChangeToCancelVoucherStatus() {
       final LocalDate validFrom = LocalDate.now();
       final LocalDate validTo = LocalDate.now().plusDays(30);
-      final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, VoucherAmount.KRW_30000);
+      final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
-      final String code = voucherService.publish(voucherRequest);
+      final String code = voucherService.publish(voucherPublishRequest);
       voucherService.disableCode(code);
       final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
 
@@ -66,10 +66,10 @@ import static org.assertj.core.api.Assertions.*;
     void whenPublishedThenEnableShouldVoucher() {
         final LocalDate validFrom = LocalDate.now();
         final LocalDate validTo = LocalDate.now().plusDays(30);
-        final VoucherRequest voucherRequest = new VoucherRequest(validFrom, validTo, VoucherAmount.KRW_30000);
+        final VoucherPublishRequest voucherPublishRequest = new VoucherPublishRequest(validFrom, validTo, VoucherAmount.KRW_30000);
 
 
-        final String code = voucherService.publish(voucherRequest);
+        final String code = voucherService.publish(voucherPublishRequest);
         voucherService.useCode(code);
         final VoucherEntity voucherPs = voucherRepository.findByCode(code).get();
 

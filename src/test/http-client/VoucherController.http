@@ -1,0 +1,10 @@
+### 사원 조회
+GET http://localhost:9000/api/v1/employee/1
+
+### 상품권 생성
+POST localhost:9000/api/v1/voucher
+Content-Type: application/json
+
+{
+  "amount": "KRW_30000"
+}

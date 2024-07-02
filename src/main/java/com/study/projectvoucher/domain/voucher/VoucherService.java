@@ -2,10 +2,12 @@ package com.study.projectvoucher.domain.voucher;
 
 import com.study.projectvoucher.domain.common.VoucherAmount;
 import com.study.projectvoucher.domain.common.VoucherStatus;
-import com.study.projectvoucher.model.voucher.VoucherRequest;
+import com.study.projectvoucher.model.voucher.VoucherPublishRequest;
+import com.study.projectvoucher.model.voucher.VoucherPublishResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -23,12 +25,12 @@ public class VoucherService {
 
     // 상품권 생성
     @Transactional
-    public String publish(VoucherRequest voucherRequest){
+    public VoucherPublishResponse publish(final VoucherAmount amount, final LocalDate validFrom, final LocalDate validTo){
         final String code = UUID.randomUUID().toString().toUpperCase().replaceAll("-", "");
         final VoucherEntity voucherEntity = new VoucherEntity(code,
-                VoucherStatus.PUBLISH, voucherRequest.validFrom(), voucherRequest.validTo(), voucherRequest.amount());
+                VoucherStatus.PUBLISH, validFrom, validTo, amount);
 
-        return voucherRepository.save(voucherEntity).getCode();
+        return VoucherPublishResponse.from(voucherRepository.save(voucherEntity));
     }
 
     // 상품권 사용불가 처리

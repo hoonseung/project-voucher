@@ -27,38 +27,14 @@ public class VoucherController {
         this.voucherService = voucherService;
     }
 
-    /**
-     *   V1
-     */
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/v1/voucher")
-    public VoucherPublishResponse publish(@RequestBody VoucherPublishRequest publishRequest){
-        return voucherService.publish(
-                publishRequest.amount(), LocalDate.now(), LocalDate.now().plusDays(1830L));
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/v1/voucher/use")
-    public void use(@RequestBody VoucherUseRequest useRequest){
-        voucherService.useCode(useRequest.code());
-    }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PutMapping("/v1/voucher/disable")
-    public void disable(@RequestBody VoucherDisableRequest disableRequest){
-        voucherService.disableCode(disableRequest.code());
-    }
-
 
     /**
-     * V2
+     * V2, V3
      */
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/v2/voucher")
-    public VoucherPublishV2Response publishV2(@RequestBody RequestContext requestContext, VoucherAmount amount){
-        return voucherService.publishV2(requestContext,
-                LocalDate.now(), LocalDate.now().plusDays(1830L), amount);
+    @PostMapping("/v3/voucher")
+    public VoucherPublishV3Response publishV3(@RequestBody VoucherPublishV3Request publishV3Request){
+        return voucherService.publishV3(publishV3Request);
     }
 
 
@@ -75,14 +51,7 @@ public class VoucherController {
         return voucherService.disableCodeV2(disableV2Request);
     }
 
-    /**
-     * V3
-     */
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/v3/voucher")
-    public VoucherPublishV3Response publishV3(@RequestBody VoucherPublishV3Request publishV3Request){
-        return voucherService.publishV3(publishV3Request);
-    }
+
 
 
 

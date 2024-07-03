@@ -10,7 +10,9 @@ import com.study.projectvoucher.domain.history.VoucherHistoryEntity;
 import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
+import com.study.projectvoucher.model.voucher.v2.VoucherDisableV2Request;
 import com.study.projectvoucher.model.voucher.v2.VoucherPublishV2Response;
+import com.study.projectvoucher.model.voucher.v2.VoucherUseV2Request;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Request;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Response;
 import org.junit.jupiter.api.DisplayName;
@@ -64,24 +66,22 @@ import static org.assertj.core.api.Assertions.assertThat;
    @DisplayName("발행된 상품권은 사용불가 처리 할 수 있다.")
    @Test
    void whenPublishedThenEnableShouldChangeToCancelVoucherStatus() {
-      final LocalDate validFrom = LocalDate.now();
-      final LocalDate validTo = LocalDate.now().plusDays(30);
+      final String contractCode = "CT001";
+
+       VoucherPublishV3Response v3Response = voucherService.publishV3(new VoucherPublishV3Request(
+               RequestType.PARTNER, UUID.randomUUID().toString(), contractCode, VoucherAmount.KRW_30000));
 
 
-       VoucherPublishV2Response v2Response = voucherService.publishV2(new RequestContext(
-               RequestType.PARTNER, UUID.randomUUID().toString()), validFrom, validTo, VoucherAmount.KRW_30000);
-
-       RequestContext disableRequest = new RequestContext(RequestType.PARTNER, UUID.randomUUID().toString());
-       voucherService.disableCodeV2(disableRequest, v2Response.code());
-      final VoucherEntity voucherPs = voucherRepository.findByCode(v2Response.code()).get();
+       voucherService.disableCodeV2(new VoucherDisableV2Request(RequestType.PARTNER, UUID.randomUUID().toString(), v3Response.code()));
+      final VoucherEntity voucherPs = voucherRepository.findByCode(v3Response.code()).get();
 
 
-      assertThat(voucherPs.getCode()).isEqualTo(v2Response.code());
+      assertThat(voucherPs.getCode()).isEqualTo(v3Response.code());
       assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.DISABLE);
       assertThat(voucherPs.getCreatedAt()).isNotEqualTo(voucherPs.getUpdatedAt());
 
        VoucherHistoryEntity historyEntity = voucherPs.getHistories().get(1);
-       assertThat(historyEntity.getRequestType()).isEqualTo(v2Response.requestType());
+       assertThat(historyEntity.getRequestType()).isEqualTo(v3Response.requestType());
        assertThat(historyEntity.getDescription()).isEqualTo("상품권 폐기 테스트");
        assertThat(historyEntity.getStatus()).isEqualTo(VoucherStatus.DISABLE);
    }
@@ -90,18 +90,16 @@ import static org.assertj.core.api.Assertions.assertThat;
     @DisplayName("발행된 상품권은 사용할 수 있다.")
     @Test
     void whenPublishedThenEnableShouldVoucher() {
-        final LocalDate validFrom = LocalDate.now();
-        final LocalDate validTo = LocalDate.now().plusDays(30);
+        final String contractCode = "CT001";
+
+        VoucherPublishV3Response v3Response = voucherService.publishV3(new VoucherPublishV3Request(
+                RequestType.PARTNER, UUID.randomUUID().toString(), contractCode, VoucherAmount.KRW_30000));
 
 
-        VoucherPublishV2Response v2Response = voucherService.publishV2(new RequestContext(
-                RequestType.PARTNER, UUID.randomUUID().toString()), validFrom, validTo, VoucherAmount.KRW_30000);
-        RequestContext useRequest = new RequestContext(RequestType.PARTNER, UUID.randomUUID().toString());
+        voucherService.useCodeV2(new VoucherUseV2Request(RequestType.PARTNER, UUID.randomUUID().toString(), v3Response.code()));
+        final VoucherEntity voucherPs = voucherRepository.findByCode(v3Response.code()).get();
 
-        voucherService.useCodeV2(useRequest, v2Response.code());
-        final VoucherEntity voucherPs = voucherRepository.findByCode(v2Response.code()).get();
-
-        assertThat(voucherPs.getCode()).isEqualTo(v2Response.code());
+        assertThat(voucherPs.getCode()).isEqualTo(v3Response.code());
         assertThat(voucherPs.getStatus()).isEqualTo(VoucherStatus.USE);
         assertThat(voucherPs.getCreatedAt()).isNotEqualTo(voucherPs.getUpdatedAt());
 

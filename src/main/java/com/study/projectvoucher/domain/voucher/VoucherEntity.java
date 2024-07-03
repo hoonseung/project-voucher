@@ -4,6 +4,7 @@ package com.study.projectvoucher.domain.voucher;
 import com.study.projectvoucher.domain.BaseEntity;
 import com.study.projectvoucher.common.type.VoucherAmount;
 import com.study.projectvoucher.common.type.VoucherStatus;
+import com.study.projectvoucher.domain.contract.ContractEntity;
 import com.study.projectvoucher.domain.history.VoucherHistoryEntity;
 import jakarta.persistence.*;
 
@@ -32,17 +33,22 @@ public class VoucherEntity extends BaseEntity {
     @JoinColumn(name = "voucher_id")
     private List<VoucherHistoryEntity> histories = new ArrayList<>();
 
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "contract_id")
+    private ContractEntity contract;
+
 
     protected VoucherEntity(){}
 
-    public VoucherEntity(String code, VoucherStatus status, LocalDate validFrom, LocalDate validTo, VoucherAmount amount,
-                         VoucherHistoryEntity voucherHistory) {
+    public VoucherEntity(String code, VoucherStatus status, VoucherAmount amount,
+                         VoucherHistoryEntity voucherHistory, ContractEntity contract) {
         this.code = code;
         this.status = status;
-        this.validFrom = validFrom;
-        this.validTo = validTo;
+        this.validFrom = LocalDate.now();
+        this.validTo = LocalDate.now().plusDays(contract.getVoucherValidPeriodDayCount());
         this.amount = amount;
         this.histories.add(voucherHistory);
+        this.contract = contract;
     }
 
     public String getCode() {
@@ -67,6 +73,10 @@ public class VoucherEntity extends BaseEntity {
 
     public List<VoucherHistoryEntity> getHistories() {
         return histories;
+    }
+
+    public ContractEntity getContract() {
+        return contract;
     }
 
     public void changeStatusToDisable(VoucherHistoryEntity voucherHistory) {

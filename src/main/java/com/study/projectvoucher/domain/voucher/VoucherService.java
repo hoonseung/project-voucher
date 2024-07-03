@@ -29,46 +29,6 @@ public class VoucherService {
         this.contractRepository = contractRepository;
     }
 
-    // 상품권 생성 v1 사용불가
-    @Transactional
-    public VoucherPublishResponse publish(final VoucherAmount amount, final LocalDate validFrom, final LocalDate validTo){
-        final String code = getUUID();
-        final VoucherEntity voucherEntity = new VoucherEntity(code, VoucherStatus.PUBLISH, validFrom, validTo, amount, null);
-
-        return VoucherPublishResponse.from(voucherRepository.save(voucherEntity));
-    }
-
-    // 상품권 사용불가 처리 v1 사용불가
-    @Transactional
-    public void disableCode(final String code){
-        final VoucherEntity voucherPs = voucherRepository.findByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품권을 찾을 수 없습니다."));
-        voucherPs.changeStatusToDisable(null);
-    }
-
-
-    // 상품권 사용 v1 사용불가
-    @Transactional
-    public void useCode(final String code){
-        final VoucherEntity voucherPs = voucherRepository.findByCode(code)
-                .orElseThrow(() -> new IllegalArgumentException("해당 상품권을 찾을 수 없습니다."));
-        voucherPs.changeStatusToUse(null);
-    }
-
-
-    // 상품권 생성
-    @Transactional
-    public VoucherPublishV2Response publishV2(RequestContext requestContext,
-                                              final LocalDate validFrom, final LocalDate validTo, VoucherAmount amount){
-        final String code = getUUID();
-        final String orderId = getUUID();
-        final VoucherHistoryEntity historyEntity = new VoucherHistoryEntity(orderId, requestContext.requestType(), VoucherStatus.PUBLISH, "테스트 발행");
-        final VoucherEntity voucherEntity = new VoucherEntity(code,
-                VoucherStatus.PUBLISH, validFrom, validTo, amount, historyEntity);
-
-        return VoucherPublishV2Response.from(voucherRepository.save(voucherEntity), orderId,
-                requestContext.requestType());
-    }
 
 
     // 상품권 사용불가 처리
@@ -102,7 +62,6 @@ public class VoucherService {
     /**
      * V3
      */
-
     // 상품권 생성
     @Transactional
     public VoucherPublishV3Response publishV3(VoucherPublishV3Request publishV3Request){
@@ -112,8 +71,7 @@ public class VoucherService {
         final ContractEntity contractEntity = contractRepository.findByCode(publishV3Request.contractCode()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계약입니다."));
         final VoucherHistoryEntity voucherHistoryEntity = new VoucherHistoryEntity(orderId, publishV3Request.requestType(), VoucherStatus.PUBLISH, "테스트 발행");
         final VoucherEntity voucherEntity = new VoucherEntity(code, VoucherStatus.PUBLISH,
-                LocalDate.now(), LocalDate.now().plusDays(contractEntity.getVoucherValidPeriodDayCount()),
-                publishV3Request.amount(), voucherHistoryEntity);
+                publishV3Request.amount(), voucherHistoryEntity, contractEntity);
         return VoucherPublishV3Response.from(voucherRepository.save(voucherEntity), orderId, publishV3Request.requestType(),
                 publishV3Request.contractCode());
     }

@@ -3,6 +3,7 @@ spring:
     url: jdbc:h2:mem:test
 
 
+
 logging:
   level:
     org.hibernate.SQL: trace

@@ -5,6 +5,8 @@ server:
     keep-alive-timeout: 15s
 
 spring:
+  profiles:
+    active: prod
   jpa:
     hibernate:
       ddl-auto: create

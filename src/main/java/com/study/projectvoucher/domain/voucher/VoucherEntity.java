@@ -98,4 +98,12 @@ public class VoucherEntity extends BaseEntity {
             throw new IllegalStateException("사용할 수 없는 상태의 상품권 입니다.");
         }
     }
+
+
+    public VoucherHistoryEntity publishHistory(){
+        return histories.stream()
+                .filter(history -> history.getStatus().equals(VoucherStatus.PUBLISH))
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("발행 이력이 존재하지 않습니다"));
+    }
 }

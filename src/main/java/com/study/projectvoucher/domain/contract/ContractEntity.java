@@ -13,9 +13,9 @@ public class ContractEntity extends BaseEntity {
 
     private String code;  // 게약 고유 코드
 
-    private LocalDate validTo; // 계약 유효 기간 시작일
+    private LocalDate validFrom; // 계약 유효 기간 시작일
 
-    private LocalDate validFrom; // 계약 유효 기간 만료일
+    private LocalDate validTo; // 계약 유효 기간 만료일
 
     private Integer voucherValidPeriodDayCount; // 상품권 유효기간 일자
 
@@ -23,10 +23,10 @@ public class ContractEntity extends BaseEntity {
     protected ContractEntity(){}
 
 
-    public ContractEntity(String code, LocalDate validTo, LocalDate validFrom, Integer voucherValidPeriodDayCount) {
+    public ContractEntity(String code, LocalDate validFrom, LocalDate validTo, Integer voucherValidPeriodDayCount) {
         this.code = code;
-        this.validTo = validTo;
         this.validFrom = validFrom;
+        this.validTo = validTo;
         this.voucherValidPeriodDayCount = voucherValidPeriodDayCount;
     }
 
@@ -34,15 +34,21 @@ public class ContractEntity extends BaseEntity {
         return code;
     }
 
-    public LocalDate getValidTo() {
-        return validTo;
-    }
-
     public LocalDate getValidFrom() {
         return validFrom;
     }
 
+    public LocalDate getValidTo() {
+        return validTo;
+    }
+
     public Integer getVoucherValidPeriodDayCount() {
         return voucherValidPeriodDayCount;
+    }
+
+
+    public void periodIsValid(){
+        if(this.validTo.isBefore(LocalDate.now()))
+            throw new IllegalArgumentException("유효기간이 지난 계약입니다.");
     }
 }

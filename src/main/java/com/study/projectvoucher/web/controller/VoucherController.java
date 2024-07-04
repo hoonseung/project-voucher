@@ -1,20 +1,11 @@
 package com.study.projectvoucher.web.controller;
 
-import com.study.projectvoucher.common.dto.RequestContext;
-import com.study.projectvoucher.common.type.VoucherAmount;
-import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.voucher.VoucherService;
-import com.study.projectvoucher.model.voucher.v1.VoucherDisableRequest;
-import com.study.projectvoucher.model.voucher.v1.VoucherPublishRequest;
-import com.study.projectvoucher.model.voucher.v1.VoucherPublishResponse;
-import com.study.projectvoucher.model.voucher.v1.VoucherUseRequest;
 import com.study.projectvoucher.model.voucher.v2.*;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Request;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
 
 @RequestMapping("/api")
 @RestController
@@ -48,7 +39,7 @@ public class VoucherController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/v2/voucher/disable")
     public VoucherDisableV2Response disableV2(@RequestBody VoucherDisableV2Request disableV2Request){
-        return voucherService.disableCodeV2(disableV2Request);
+        return voucherService.disableCodeV3(disableV2Request);
     }
 
 

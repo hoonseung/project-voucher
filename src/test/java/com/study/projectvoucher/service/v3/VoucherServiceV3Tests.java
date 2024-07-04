@@ -1,6 +1,5 @@
 package com.study.projectvoucher.service.v3;
 
-import com.study.projectvoucher.common.dto.RequestContext;
 import com.study.projectvoucher.common.type.RequestType;
 import com.study.projectvoucher.common.type.VoucherAmount;
 import com.study.projectvoucher.common.type.VoucherStatus;
@@ -11,7 +10,6 @@ import com.study.projectvoucher.domain.voucher.VoucherEntity;
 import com.study.projectvoucher.domain.voucher.VoucherRepository;
 import com.study.projectvoucher.domain.voucher.VoucherService;
 import com.study.projectvoucher.model.voucher.v2.VoucherDisableV2Request;
-import com.study.projectvoucher.model.voucher.v2.VoucherPublishV2Response;
 import com.study.projectvoucher.model.voucher.v2.VoucherUseV2Request;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Request;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Response;
@@ -21,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ActiveProfiles("test")
 @SpringBootTest
@@ -67,12 +65,12 @@ import static org.assertj.core.api.Assertions.assertThat;
    @Test
    void whenPublishedThenEnableShouldChangeToCancelVoucherStatus() {
       final String contractCode = "CT001";
-
+      final String requestId = UUID.randomUUID().toString();
        VoucherPublishV3Response v3Response = voucherService.publishV3(new VoucherPublishV3Request(
-               RequestType.PARTNER, UUID.randomUUID().toString(), contractCode, VoucherAmount.KRW_30000));
+               RequestType.PARTNER, requestId, contractCode, VoucherAmount.KRW_30000));
 
 
-       voucherService.disableCodeV2(new VoucherDisableV2Request(RequestType.PARTNER, UUID.randomUUID().toString(), v3Response.code()));
+       voucherService.disableCodeV3(new VoucherDisableV2Request(RequestType.PARTNER, requestId, v3Response.code()));
       final VoucherEntity voucherPs = voucherRepository.findByCode(v3Response.code()).get();
 
 
@@ -106,6 +104,37 @@ import static org.assertj.core.api.Assertions.assertThat;
         VoucherHistoryEntity historyEntity = voucherPs.getHistories().get(1);
         assertThat(historyEntity.getStatus()).isEqualTo(VoucherStatus.USE);
         assertThat(historyEntity.getDescription()).isEqualTo("상품권 사용 테스트");
+    }
+
+
+    @DisplayName("유효기간이 지난 계약으로 상품권 발행 불가")
+    @Test
+    void whenContractExpiredThenEShouldDisabledVoucher() {
+        final String contractCode = "CT010";
+        final VoucherPublishV3Request publishV3Request = new VoucherPublishV3Request(
+                RequestType.PARTNER, UUID.randomUUID().toString(), contractCode, VoucherAmount.KRW_30000);
+
+
+        assertThatThrownBy(() -> voucherService.publishV3(publishV3Request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("유효기간이 지난 계약입니다.");
+    }
+
+
+    @DisplayName("상품권은 발행 요청자만 사용 불가 처리 가능")
+    @Test
+    void VoucherDisableCanBeOnlyVoucherPublisher() {
+        final String contractCode = "CT001";
+        final VoucherPublishV3Request publishV3Request = new VoucherPublishV3Request(
+                RequestType.PARTNER, UUID.randomUUID().toString(), contractCode, VoucherAmount.KRW_30000);
+        final VoucherPublishV3Response publishV3Response = voucherService.publishV3(publishV3Request);
+
+        final VoucherDisableV2Request disableV2Request = new VoucherDisableV2Request(RequestType.USER, UUID.randomUUID().toString(),
+                publishV3Response.code());
+
+        assertThatThrownBy(() -> voucherService.disableCodeV3(disableV2Request))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("사용 불가 처리 권한이 없는 상품권 입니다.");
     }
 
 

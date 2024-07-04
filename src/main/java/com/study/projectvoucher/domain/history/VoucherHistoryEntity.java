@@ -18,6 +18,8 @@ public class VoucherHistoryEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private RequestType requestType;
 
+    private String requestId;
+
     @Enumerated(EnumType.STRING)
     private VoucherStatus status;
 
@@ -27,9 +29,10 @@ public class VoucherHistoryEntity extends BaseEntity {
 
     protected VoucherHistoryEntity(){}
 
-    public VoucherHistoryEntity(String orderId, RequestType requestType, VoucherStatus status, String description) {
+    public VoucherHistoryEntity(String orderId, RequestType requestType, String requestId, VoucherStatus status, String description) {
         this.orderId = orderId;
         this.requestType = requestType;
+        this.requestId = requestId;
         this.status = status;
         this.description = description;
     }
@@ -48,5 +51,9 @@ public class VoucherHistoryEntity extends BaseEntity {
 
     public String getOrderId() {
         return orderId;
+    }
+
+    public String getRequestId() {
+        return requestId;
     }
 }

@@ -47,8 +47,7 @@ public class ContractEntity extends BaseEntity {
     }
 
 
-    public void periodIsValid(){
-        if(this.validTo.isBefore(LocalDate.now()))
-            throw new IllegalArgumentException("유효기간이 지난 계약입니다.");
+    public boolean periodIsExpired(){
+        return validTo.isBefore(LocalDate.now());
     }
 }

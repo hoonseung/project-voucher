@@ -4,6 +4,8 @@ import com.study.projectvoucher.common.type.VoucherStatus;
 import com.study.projectvoucher.domain.contract.ContractEntity;
 import com.study.projectvoucher.domain.contract.ContractRepository;
 import com.study.projectvoucher.domain.history.VoucherHistoryEntity;
+import com.study.projectvoucher.domain.validator.VoucherDisableValidator;
+import com.study.projectvoucher.domain.validator.VoucherPublishValidator;
 import com.study.projectvoucher.model.voucher.v2.*;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Request;
 import com.study.projectvoucher.model.voucher.v3.VoucherPublishV3Response;
@@ -19,13 +21,17 @@ public class VoucherService {
 
     private final VoucherRepository voucherRepository;
     private final ContractRepository contractRepository;
+    private final VoucherPublishValidator voucherPublishValidator;
+    private final VoucherDisableValidator voucherDisableValidator;
 
-    public VoucherService(VoucherRepository voucherRepository, ContractRepository contractRepository) {
+
+    public VoucherService(VoucherRepository voucherRepository, ContractRepository contractRepository,
+                          VoucherPublishValidator voucherPublishValidator, VoucherDisableValidator voucherDisableValidator) {
         this.voucherRepository = voucherRepository;
         this.contractRepository = contractRepository;
+        this.voucherPublishValidator = voucherPublishValidator;
+        this.voucherDisableValidator = voucherDisableValidator;
     }
-
-
 
     // 상품권 사용불가 처리
     @Transactional
@@ -33,12 +39,7 @@ public class VoucherService {
         final VoucherEntity voucherPs = voucherRepository.findByCode(disableV2Request.code())
                 .orElseThrow(() -> new IllegalArgumentException("해당 상품권을 찾을 수 없습니다."));
         final String orderId = getUUID();
-
-        // 발행자만 폐기 가능
-        if (!voucherPs.publishHistory().getRequestType().equals(disableV2Request.requestType())
-        || !voucherPs.publishHistory().getRequestId().equals(disableV2Request.requestId())){
-            throw new IllegalArgumentException("사용 불가 처리 권한이 없는 상품권 입니다.");
-        }
+        voucherDisableValidator.validate(voucherPs, disableV2Request); // 발행자만 폐기 가능하도록 검증
 
         final VoucherHistoryEntity voucherHistory = new VoucherHistoryEntity(
                 orderId, disableV2Request.requestType(), disableV2Request.requestId(), VoucherStatus.DISABLE, "상품권 폐기 테스트");
@@ -73,7 +74,7 @@ public class VoucherService {
 
         final ContractEntity contractEntity = contractRepository.findByCode(publishV3Request.contractCode())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계약입니다."));
-        contractEntity.periodIsValid();
+        voucherPublishValidator.validate(contractEntity); // 유효기간 확인
 
         final VoucherHistoryEntity voucherHistoryEntity =
                 new VoucherHistoryEntity(orderId, publishV3Request.requestType(), publishV3Request.requestId(), VoucherStatus.PUBLISH, "테스트 발행");
